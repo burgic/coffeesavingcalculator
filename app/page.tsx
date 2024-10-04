@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import CoffeeSavingsCalculator from '../components/CoffeeSavingsCalculator';
 
 export default function Home() {

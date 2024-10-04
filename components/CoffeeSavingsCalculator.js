@@ -4,9 +4,6 @@
 import React, { useState, useEffect } from 'react';
 import { Slider } from './ui/slider';
 
-
-// import { cn } from "@/lib/utils"
-
 const CoffeeSavingsCalculator = () => {
   const [coffeePrice, setCoffeePrice] = useState(3);
   const [currentAge, setCurrentAge] = useState(30);
