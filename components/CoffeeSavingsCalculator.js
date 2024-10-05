@@ -23,7 +23,7 @@ const CoffeeSavingsCalculator = () => {
 
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Coffee Savings Calculator</h2>
+      <h2 className="text-3xl font-bold mb-4 text-gray-900">Coffee Savings Calculator</h2>
       <div className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-gray-700">Coffee Price: £{coffeePrice.toFixed(2)}</label>
@@ -59,8 +59,8 @@ const CoffeeSavingsCalculator = () => {
           />
         </div>
         <div className="mt-6">
-          <h3 className="text-lg font-semibold">Potential Savings at Retirement</h3>
-          <p className="text-2xl font-bold">£{savings.toLocaleString()}</p>
+          <h3 className="text-lg font-semibold text-gray-900">Potential Savings at Retirement</h3>
+          <p className="text-2xl font-bold text-gray-900">£{savings.toLocaleString()}</p>
         </div>
       </div>
     </div>
