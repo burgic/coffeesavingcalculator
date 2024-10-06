@@ -33,7 +33,7 @@ const CoffeeSavingsCalculator = () => {
             min={1}
             max={10}
             step={0.1}
-            className="mt-2"
+            className="w-full h-6"
           />
         </div>
         <div>
@@ -44,7 +44,7 @@ const CoffeeSavingsCalculator = () => {
             min={18}
             max={80}
             step={1}
-            className="mt-2"
+            className="w-full h-6"
           />
         </div>
         <div>
@@ -55,7 +55,7 @@ const CoffeeSavingsCalculator = () => {
             min={currentAge + 1}
             max={100}
             step={1}
-            className="mt-2"
+            className="w-full h-6"
           />
         </div>
         <div className="mt-6">
