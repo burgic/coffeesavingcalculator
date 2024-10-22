@@ -3,23 +3,42 @@
 
 import React, { useState, useEffect } from 'react';
 import { Slider } from './ui/slider';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const CoffeeSavingsCalculator = () => {
   const [coffeePrice, setCoffeePrice] = useState(3);
   const [currentAge, setCurrentAge] = useState(30);
   const [retirementAge, setRetirementAge] = useState(65);
+  const [inflationRate, setInflationRate] = useState(0);
+  const [returnRate, setReturnRate] = useState(5);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [savings, setSavings] = useState(0);
 
   const calculateSavings = () => {
     const yearsUntilRetirement = retirementAge - currentAge;
-    const annualSavings = coffeePrice * 365;
-    const futureValue = annualSavings * ((Math.pow(1.05, yearsUntilRetirement) - 1) / 0.05);
-    setSavings(Math.round(futureValue));
+    let totalSavings = 0;
+    
+    // Calculate year by year to account for inflation
+    for (let year = 0; year < yearsUntilRetirement; year++) {
+      // Calculate coffee price for this year with compound inflation
+      const inflatedCoffeePrice = coffeePrice * Math.pow(1 + inflationRate / 100, year);
+      const yearlyContribution = inflatedCoffeePrice * 365;
+      
+      // Add this year's savings with compound returns
+      if (year === 0) {
+        totalSavings = yearlyContribution;
+      } else {
+        // Grow existing savings at return rate
+        totalSavings = totalSavings * (1 + returnRate / 100) + yearlyContribution;
+      }
+    }
+    
+    setSavings(Math.round(totalSavings));
   };
 
   useEffect(() => {
     calculateSavings();
-  }, [coffeePrice, currentAge, retirementAge]);
+  }, [coffeePrice, currentAge, retirementAge, inflationRate, returnRate]);
 
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -58,9 +77,54 @@ const CoffeeSavingsCalculator = () => {
             className="w-full h-6"
           />
         </div>
-        <div className="mt-6">
+        
+        <div className="pt-2">
+          <button
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="flex items-center text-sm text-gray-600 hover:text-gray-900 focus:outline-none"
+          >
+            Advanced Settings
+            {showAdvanced ? <ChevronUp className="ml-1 w-4 h-4" /> : <ChevronDown className="ml-1 w-4 h-4" />}
+          </button>
+
+          <div className={`mt-4 space-y-4 transition-all duration-300 ease-in-out ${showAdvanced ? 'block' : 'hidden'}`}>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Inflation Rate: {inflationRate.toFixed(1)}%
+              </label>
+              <Slider
+                value={[inflationRate]}
+                onValueChange={(value) => setInflationRate(value[0])}
+                min={0}
+                max={10}
+                step={0.1}
+                className="w-full h-6"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Rate of Return: {returnRate.toFixed(1)}%
+              </label>
+              <Slider
+                value={[returnRate]}
+                onValueChange={(value) => setReturnRate(value[0])}
+                min={0}
+                max={15}
+                step={0.1}
+                className="w-full h-6"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
           <h3 className="text-lg font-semibold text-gray-900">Potential Savings at Retirement</h3>
-          <p className="text-2xl font-bold text-gray-900">£{savings.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-gray-900">£{savings.toLocaleString()}</p>
+          {showAdvanced && (
+            <div className="mt-2 text-sm text-gray-600">
+              <p>Assuming {inflationRate}% annual inflation and {returnRate}% annual return</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
