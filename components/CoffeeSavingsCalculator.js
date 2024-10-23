@@ -11,18 +11,21 @@ const CoffeeSavingsCalculator = () => {
   const [retirementAge, setRetirementAge] = useState(65);
   const [inflationRate, setInflationRate] = useState(0);
   const [returnRate, setReturnRate] = useState(5);
+  const [daysPerWeek, setDaysPerWeek] = useState(7);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [savings, setSavings] = useState(0);
 
   const calculateSavings = () => {
     const yearsUntilRetirement = retirementAge - currentAge;
     let totalSavings = 0;
+
+    const daysPerYear = daysPerWeek * 52;
     
     // Calculate year by year to account for inflation
     for (let year = 0; year < yearsUntilRetirement; year++) {
       // Calculate coffee price for this year with compound inflation
       const inflatedCoffeePrice = coffeePrice * Math.pow(1 + inflationRate / 100, year);
-      const yearlyContribution = inflatedCoffeePrice * 365;
+      const yearlyContribution = inflatedCoffeePrice * daysPerYear;
       
       // Add this year's savings with compound returns
       if (year === 0) {
@@ -38,7 +41,7 @@ const CoffeeSavingsCalculator = () => {
 
   useEffect(() => {
     calculateSavings();
-  }, [coffeePrice, currentAge, retirementAge, inflationRate, returnRate]);
+  }, [coffeePrice, currentAge, retirementAge, inflationRate, returnRate, daysPerWeek]);
 
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -90,6 +93,27 @@ const CoffeeSavingsCalculator = () => {
           <div className={`mt-4 space-y-4 transition-all duration-300 ease-in-out ${showAdvanced ? 'block' : 'hidden'}`}>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
+                Days Per Week: {daysPerWeek}
+              </label>
+              <Slider
+                value={[daysPerWeek]}
+                onValueChange={(value) => setDaysPerWeek(value[0])}
+                min={1}
+                max={7}
+                step={1}
+                className="w-full h-6"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                {daysPerWeek === 7 ? 'Every day' : 
+                 daysPerWeek === 5 ? 'Typical work week' :
+                 `${daysPerWeek} days per week`}
+              </p>
+            </div>
+          </div>
+
+          <div className={`mt-4 space-y-4 transition-all duration-300 ease-in-out ${showAdvanced ? 'block' : 'hidden'}`}>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Inflation Rate: {inflationRate.toFixed(1)}%
               </label>
               <Slider
@@ -122,6 +146,7 @@ const CoffeeSavingsCalculator = () => {
           <p className="text-3xl font-bold text-gray-900">£{savings.toLocaleString()}</p>
           {showAdvanced && (
             <div className="mt-2 text-sm text-gray-600">
+              <p>Based on {daysPerWeek} days per week</p>
               <p>Assuming {inflationRate}% annual inflation and {returnRate}% annual return</p>
             </div>
           )}
