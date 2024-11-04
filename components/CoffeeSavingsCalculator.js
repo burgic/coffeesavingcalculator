@@ -114,7 +114,7 @@ const CoffeeSavingsCalculator = () => {
           <div className={`mt-4 space-y-4 transition-all duration-300 ease-in-out ${showAdvanced ? 'block' : 'hidden'}`}>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Inflation Rate: {inflationRate.toFixed(1)}%
+                Average Annual Inflation: {inflationRate.toFixed(1)}%
               </label>
               <Slider
                 value={[inflationRate]}
@@ -127,7 +127,7 @@ const CoffeeSavingsCalculator = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Rate of Return: {returnRate.toFixed(1)}%
+                Average Annual Return: {returnRate.toFixed(1)}%
               </label>
               <Slider
                 value={[returnRate]}
@@ -147,7 +147,7 @@ const CoffeeSavingsCalculator = () => {
           {showAdvanced && (
             <div className="mt-2 text-sm text-gray-600">
               <p>Based on {daysPerWeek} days per week</p>
-              <p>Assuming {inflationRate}% annual inflation and {returnRate}% annual return</p>
+              <p>Assuming {inflationRate}% average annual inflation and {returnRate}% average annual return</p>
             </div>
           )}
         </div>
